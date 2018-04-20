@@ -9,8 +9,8 @@
 
 echo_mesg "Performing Cleanup if necessary"
 
-gcloud compute firewall-rules delete tf-fw -q > /dev/null 2>&1
-gcloud compute compute delete tfinstance --zone=$ZONE -q > /dev/null 2>&1
-gcloud compute addresses delete tfstaticip --region=$REGION -q > /dev/null 2>&1
+gcloud compute firewall-rules delete $FW -q > /dev/null 2>&1
+gcloud compute instances delete $INSTANCE --zone=$ZONE -q > /dev/null 2>&1
+gcloud compute addresses delete $IP --region=$REGION -q > /dev/null 2>&1
 
 echo_mesg "Cleanup Complete"

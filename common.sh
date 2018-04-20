@@ -5,19 +5,49 @@ echo_mesg() {
 }
 
 ###
-# Utility method to ensure a URL returns HTTP 200
+# Utility method to ensure a URL returns HTTP 401
 #
 # When a HTTP load balancer is defined, there is a period of time needed to ensure all netowrk paths are clear
 # and the requests result in happy requests.
 ###
 checkAppIsReady() {
-  #Check app is ready
-  local URL=$1
-  local HTTP_CODE=$(curl -Is http://${URL}/ | grep HTTP | cut -d ' ' -f2)
-  while [ $HTTP_CODE -ne 200 ]
+  local OUT=$(gcloud compute instances get-serial-port-output $INSTANCE --zone=$ZONE --start=0)
+  local READY=$(echo $OUT | grep "Running on http" | wc -l | xargs)
+
+  while [[ $READY < 1 ]]
   do
-    echo "Waiting for app to become ready: $HTTP_CODE"
-    sleep 10
-    HTTP_CODE=$(curl -Is http://${URL}/ | grep HTTP | cut -d ' ' -f2)
+    echo "Sleeping while instance updates libraries ...."
+    sleep 15
+    READY=$(echo $OUT | grep "Running on http" | wc -l | xargs)
   done
+}
+
+###
+# Method which waits for a VM Instance to start.
+#
+# It loops until the status of the instances is "RUNNING"
+###
+waitForInstanceToStart(){
+  local INSTANCE_NAME=$1
+  local ZONE=`gcloud compute instances list | grep $INSTANCE_NAME | xargs | cut -d ' ' -f2`
+  local STATUS=`gcloud compute instances describe $INSTANCE_NAME --zone=${ZONE} | grep "status:" | cut -d ' ' -f2`
+
+  while [[ "$STATUS" != "RUNNING" ]]
+  do
+    echo "Sleeping while instance starts ...."
+    sleep 3
+    STATUS=`gcloud compute instances describe $INSTANCE_NAME --zone=${ZONE} | grep "status:" | cut -d ' ' -f2`
+  done
+}
+
+###
+#
+# Method which grabs the console output for debugging.
+#
+###
+getInstanceOutput() {
+  local INST=$1
+  local ZONE=`gcloud compute instances list | grep $INST | xargs | cut -d ' ' -f2`
+
+  gcloud compute instances get-serial-port-output ${INST} --zone=${ZONE}
 }
