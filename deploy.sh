@@ -33,3 +33,4 @@ sleep 3
 
 ####### Launch
 open http://$ADDRESS/
+echo "username/passw0rd"

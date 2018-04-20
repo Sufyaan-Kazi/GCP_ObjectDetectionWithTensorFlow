@@ -16,8 +16,9 @@ checkAppIsReady() {
 
   while [[ $READY < 1 ]]
   do
-    echo "Sleeping while instance updates libraries ...."
-    sleep 15
+    echo "Sleeping while compute instance updates it's tensorflow and a.n.other libraries ...."
+    sleep 45
+    OUT=$(gcloud compute instances get-serial-port-output $INSTANCE --zone=$ZONE --start=0)
     READY=$(echo $OUT | grep "Running on http" | wc -l | xargs)
   done
 }
