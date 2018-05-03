@@ -11,6 +11,17 @@
 # Start
 . ./cleanup.sh
 
+enableAPIIfNecessary() {
+  API_EXISTS=`gcloud services list | grep $1 | wc -l`
+
+  if [ $API_EXISTS -eq 0 ]
+  then
+    gcloud services enable $1
+  fi
+}
+
+enableAPIIfNecessary compute.googleapis.com
+
 ######## Create Static IP
 echo_mesg "Allocating Static IP"
 gcloud compute addresses create $IP --region=$REGION
