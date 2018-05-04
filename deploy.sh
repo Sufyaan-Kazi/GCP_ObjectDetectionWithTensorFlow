@@ -7,6 +7,7 @@
 #Load in vars and common functions
 . ./vars.properties
 . ./common.sh
+. ./demoinit.sh
 
 # Start
 . ./cleanup.sh
