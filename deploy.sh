@@ -12,6 +12,8 @@
 # Start
 . ./cleanup.sh
 
+PROJECT_ID=`gcloud config list project --format "value(core.project)"`
+
 ######## Create Static IP
 echo_mesg "Allocating Static IP"
 gcloud compute addresses create $IP --region=$REGION
