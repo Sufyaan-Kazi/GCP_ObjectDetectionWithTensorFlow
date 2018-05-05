@@ -7,3 +7,4 @@ It launches a Google Compute Instance running an open source Object Detection AP
 
 To change the object detection library (for speed and/or different acuracy), modify the matching line in startup-script.sh using the instructions here: https://cloud.google.com/solutions/creating-object-detection-application-tensorflow#change_the_inference_model
 
+To tidy up and remove GCP resources, run cleanup.sh
