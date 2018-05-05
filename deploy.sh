@@ -35,5 +35,5 @@ gcloud compute firewall-rules create $FW --network=default --allow=tcp:80 --sour
 sleep 3
 
 ####### Launch
-open http://$ADDRESS/
-echo "username/passw0rd"
+echo_mesg "App available at http://$ADDRESS/, username: username, password: passw0rd"
+# open http://$ADDRESS/
